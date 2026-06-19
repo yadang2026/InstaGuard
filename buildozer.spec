@@ -106,11 +106,11 @@ android.private_storage = True
 # (bool) If True, then automatically accept SDK license agreements
 android.accept_sdk_license = True
 # Android Gradle Plugin version (fix: avoid com.android.internal.application error)
-android.gradle_plugin_version = 4.2.2
+android.gradle_plugin_version = 8.1.0
 
 # Java source/target compatibility
-android.java.source = 8
-android.java.target = 8
+android.java.source = 11
+android.java.target = 11
 
 
 # (str) Android entry point, default is ok for Kivy-based app
