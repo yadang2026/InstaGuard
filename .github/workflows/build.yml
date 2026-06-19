@@ -1,8 +1,7 @@
 name: Build APK
 on:
   push:
-    branches: [master, main, develop]
-    paths-ignore: ['**.md', '**.txt']
+    branches: [master, main]
   workflow_dispatch:
 
 jobs:
@@ -13,22 +12,21 @@ jobs:
       - run: rm -rf InstaGuard/ **/__pycache__/ 2>/dev/null
       - uses: actions/setup-python@v5
         with: {python-version: '3.10'}
-      - run: |
+      - name: Install deps
+        run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq python3-pip python3-dev git autoconf libtool pkg-config zlib1g-dev libncurses-dev cmake libffi-dev libssl-dev openjdk-17-jdk unzip zip
           pip install buildozer cython
-            - name: Patch p4a kivy recipe (remove pyjnius/android)
+      - name: Patch kivy
         run: |
-          set -e
-          # Wait for p4a to be cloned, then patch
-          for i in 1 2 3 4 5; do
-            RECIPE=".buildozer/android/platform/python-for-android/pythonforandroid/recipes/kivy/__init__.py"
-            if [ -f "$RECIPE" ]; then
-              sed -i "s/'pyjnius', //g; s/, 'pyjnius'//g; s/'android', //g; s/, 'android'//g" "$RECIPE"
-              echo "Patched kivy recipe: $(grep depends $RECIPE)"
+          for i in 1 2 3 4 5 6; do
+            r=".buildozer/android/platform/python-for-android/pythonforandroid/recipes/kivy/__init__.py"
+            if [ -f "$r" ]; then
+              sed -i "s/'pyjnius', //g; s/, 'pyjnius'//g; s/'android', //g; s/, 'android'//g" "$r"
+              echo "Patched: $(grep depends $r)"
               break
             fi
-            sleep 60
+            sleep 30
           done
       - run: buildozer -v android debug
         timeout-minutes: 30
