@@ -19,8 +19,8 @@ source.include_exts = py,png,jpg,kv,atlas,json,txt,md
 version = 1.0.0
 
 # (list) Application requirements
-# comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy==2.3.0,https://github.com/kivymd/KivyMD/archive/refs/heads/master.zip,requests,httpx,lxml
+# comma separated e.g. requirements = python3,kivy,kivymd
+requirements = python3,kivy,kivymd
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -117,8 +117,7 @@ android.accept_sdk_license = True
 #p4a.fork = kivy
 
 # (str) python-for-android branch to use, defaults to master
-#p4a.branch = master
-
+#
 # (str) python-for-android specific commit to use, defaults to HEAD, must be within p4a.branch
 #p4a.commit = HEAD
 
