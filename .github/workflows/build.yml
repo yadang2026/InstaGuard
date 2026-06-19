@@ -1,0 +1,23 @@
+name: Build APK
+on:
+  push:
+    branches: [master, main, develop]
+    paths-ignore: ['**.md', '**.txt']
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: rm -rf InstaGuard/ **/__pycache__/ 2>/dev/null
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.10'}
+      - run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq python3-pip python3-dev git autoconf libtool pkg-config zlib1g-dev libncurses-dev cmake libffi-dev libssl-dev openjdk-17-jdk unzip zip
+          pip install buildozer cython
+      - run: buildozer -v android debug
+        timeout-minutes: 30
+      - uses: actions/upload-artifact@v4
+        with: {name: APK, path: bin/*.apk}
