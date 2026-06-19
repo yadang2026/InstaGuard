@@ -1,0 +1,54 @@
+name: Build InstaGuard APK
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:  # 手动触发
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            python3-pip python3-dev build-essential \
+            git autoconf libtool pkg-config zlib1g-dev \
+            libncurses5-dev libncursesw5-dev libtinfo5 \
+            cmake libffi-dev libssl-dev openjdk-17-jdk \
+            autoconf automake libtool pkg-config \
+            libltdl-dev unzip zip
+
+      - name: Install Python dependencies
+        run: |
+          pip install --upgrade pip
+          pip install buildozer cython virtualenv
+
+      - name: Build APK with Buildozer
+        run: |
+          cd $GITHUB_WORKSPACE
+          buildozer android debug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: InstaGuard-APK
+          path: bin/*.apk
+          retention-days: 30
+
+      - name: Show APK info
+        run: |
+          echo "=== APK 构建完成 ==="
+          ls -lh bin/*.apk 2>/dev/null || echo "APK 在 bin/ 目录"
+          echo ""
+          echo "下载地址: 点击本页面上方的 Artifacts → InstaGuard-APK"
