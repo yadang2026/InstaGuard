@@ -1,0 +1,20 @@
+name: Build
+
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.10'}
+      - run: |
+          sed -i 's/libncurses5-dev //' .github/workflows/main.yml 2>/dev/null || true
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq python3-pip python3-dev build-essential git autoconf libtool pkg-config zlib1g-dev libncurses-dev libtinfo-dev cmake libffi-dev libssl-dev openjdk-17-jdk libltdl-dev unzip zip
+          pip install buildozer cython virtualenv
+          buildozer android debug
+        timeout-minutes: 30
+      - uses: actions/upload-artifact@v4
+        with: {name: APK, path: 'bin/*.apk'}
