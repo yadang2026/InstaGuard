@@ -17,15 +17,18 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq python3-pip python3-dev git autoconf libtool pkg-config zlib1g-dev libncurses-dev cmake libffi-dev libssl-dev openjdk-17-jdk unzip zip
           pip install buildozer cython
+          # Install Gradle 8.2 (compatible with AGP 8.1.0)
+          cd /tmp && curl -sL https://services.gradle.org/distributions/gradle-8.2-bin.zip -o gradle.zip && unzip -q gradle.zip && sudo mv gradle-8.2 /opt/gradle && sudo ln -sf /opt/gradle/bin/gradle /usr/bin/gradle && gradle --version
       - name: Patch kivy
         run: |
-          for i in 1 2 3 4 5 6; do
+          for i in 1 2 3 4 5 6 7 8; do
             r=".buildozer/android/platform/python-for-android/pythonforandroid/recipes/kivy/__init__.py"
             if [ -f "$r" ]; then
               sed -i "s/'pyjnius', //g; s/, 'pyjnius'//g; s/'android', //g; s/, 'android'//g" "$r"
               echo "Patched: $(grep depends $r)"
               break
             fi
+            echo "Waiting for p4a clone... attempt $i"
             sleep 30
           done
       - run: buildozer -v android debug
