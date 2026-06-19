@@ -20,7 +20,7 @@ version = 1.0.0
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy>=2.3.0,kivymd>=1.2.0,androguard>=4.1.0,openai>=1.30.0,anthropic>=0.30.0,httpx>=0.27.0,requests>=2.31.0,lxml>=4.9.0,cryptography>=41.0.0
+requirements = python3,kivy==2.3.0,https://github.com/kivymd/KivyMD/archive/refs/heads/master.zip,requests,httpx,lxml
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -74,7 +74,7 @@ android.permissions = INTERNET,READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE,RECO
 #android.features = android.hardware.usb.host
 
 # (int) Target Android API
-android.api = 34
+android.api = 33
 
 # (int) Minimum API your APK will support
 android.minapi = 26
