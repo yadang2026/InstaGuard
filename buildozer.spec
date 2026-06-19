@@ -4,7 +4,7 @@
 title = InstaGuard
 
 # (str) Package name
-package.name = com.instaguard.app
+package.name = InstaGuard
 
 # (str) Package domain (needed for android/ios packaging)
 package.domain = com.instaguard
@@ -106,7 +106,6 @@ android.private_storage = True
 # (bool) If True, then automatically accept SDK license agreements
 android.accept_sdk_license = True
 # Android Gradle Plugin version (fix: avoid com.android.internal.application error)
-android.gradle_plugin_version = 8.1.0
 
 # Java source/target compatibility
 android.java.source = 11
