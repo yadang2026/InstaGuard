@@ -19,16 +19,25 @@ jobs:
           pip install buildozer cython
           # Install Gradle 8.2 (compatible with AGP 8.1.0)
           cd /tmp && curl -sL https://services.gradle.org/distributions/gradle-8.2-bin.zip -o gradle.zip && unzip -q gradle.zip && sudo mv gradle-8.2 /opt/gradle && sudo ln -sf /opt/gradle/bin/gradle /usr/bin/gradle && gradle --version
-      - name: Patch kivy
+      - name: Patch p4a (kivy recipe + gradle template)
         run: |
+          P4A_DIR=".buildozer/android/platform/python-for-android"
           for i in 1 2 3 4 5 6 7 8; do
-            r=".buildozer/android/platform/python-for-android/pythonforandroid/recipes/kivy/__init__.py"
+            r="$P4A_DIR/pythonforandroid/recipes/kivy/__init__.py"
             if [ -f "$r" ]; then
+              # Fix 1: Remove pyjnius/android from kivy depends
               sed -i "s/'pyjnius', //g; s/, 'pyjnius'//g; s/'android', //g; s/, 'android'//g" "$r"
-              echo "Patched: $(grep depends $r)"
+              echo "Kivy recipe: $(grep depends $r)"
+              
+              # Fix 2: Fix gradle template (replace com.android.internal.application)
+              g="$P4A_DIR/pythonforandroid/bootstraps/sdl2/build.template.gradle"
+              if [ -f "$g" ]; then
+                sed -i 's/com.android.internal.application/com.android.application/g' "$g"
+                echo "Gradle template patched"
+              fi
               break
             fi
-            echo "Waiting for p4a clone... attempt $i"
+            echo "Waiting... attempt $i"
             sleep 30
           done
       - run: buildozer -v android debug
