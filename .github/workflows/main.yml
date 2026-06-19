@@ -1,29 +1,53 @@
 name: Build InstaGuard APK
 
 on:
-  push:
-    branches: [main, master]
   workflow_dispatch:
 
 jobs:
   build-apk:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Clean up nested duplicate
+        run: |
+          ls -la
+          rm -rf InstaGuard/ .github/workflows/*.txt test123.txt
+          echo "=== Project files ==="
+          ls -la
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.10'
+
       - name: Install system dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y python3-pip python3-dev build-essential git autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev openjdk-17-jdk libltdl-dev unzip zip
-      - name: Build APK
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq python3-pip python3-dev build-essential git autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev openjdk-17-jdk libltdl-dev unzip zip
+          java -version
+          python3 --version
+
+      - name: Install Buildozer and Python deps
         run: |
+          pip install --upgrade pip setuptools wheel
           pip install buildozer cython virtualenv
-          buildozer android debug
+
+      - name: Build APK
+        timeout-minutes: 25
+        run: |
+          echo "=== Building from $(pwd) ==="
+          ls main.py buildozer.spec
+          buildozer android debug 2>&1
+
       - name: Upload APK
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: InstaGuard-APK
-          path: bin/*.apk
+          path: |
+            bin/*.apk
+            .buildozer/android/platform/build-*/dists/*/build/outputs/apk/debug/*.apk
           retention-days: 30
