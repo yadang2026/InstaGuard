@@ -4,7 +4,7 @@
 title = InstaGuard
 
 # (str) Package name
-package.name = InstaGuard
+package.name = com.instaguard.app
 
 # (str) Package domain (needed for android/ios packaging)
 package.domain = com.instaguard
@@ -19,8 +19,8 @@ source.include_exts = py,png,jpg,kv,atlas,json,txt,md
 version = 1.0.0
 
 # (list) Application requirements
-# comma separated e.g. requirements = python3,kivy==2.3.1,https://github.com/kivymd/KivyMD/archive/refs/heads/master.zip,androguard,openai,anthropic,requests
-requirements = python3,kivy==2.3.1,https://github.com/kivymd/KivyMD/archive/refs/heads/master.zip,androguard,openai,anthropic,requests
+# comma separated e.g. requirements = sqlite3,kivy
+requirements = python3,kivy==2.3.0,https://github.com/kivymd/KivyMD/archive/refs/heads/master.zip,requests,httpx,lxml,androguard,openai,anthropic
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -105,12 +105,11 @@ android.private_storage = True
 
 # (bool) If True, then automatically accept SDK license agreements
 android.accept_sdk_license = True
-# Android Gradle Plugin version (fix: avoid com.android.internal.application error)
 
-# Java source/target compatibility
-android.java.source = 11
-android.java.target = 11
+# (list) AndroidX / Android support libraries (needed by KivyMD)
+android.gradle_dependencies = androidx.appcompat:appcompat:1.6.1,com.google.android.material:material:1.11.0,androidx.cardview:cardview:1.0.0
 
+# (list) Gradle plugins to use
 
 # (str) Android entry point, default is ok for Kivy-based app
 #android.entrypoint = org.kivy.android.PythonActivity
@@ -123,7 +122,8 @@ android.java.target = 11
 #p4a.fork = kivy
 
 # (str) python-for-android branch to use, defaults to master
-#
+#p4a.branch = master
+
 # (str) python-for-android specific commit to use, defaults to HEAD, must be within p4a.branch
 #p4a.commit = HEAD
 
