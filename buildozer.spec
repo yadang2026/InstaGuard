@@ -74,7 +74,7 @@ android.permissions = INTERNET,READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE,RECO
 #android.features = android.hardware.usb.host
 
 # (int) Target Android API
-android.api = 33
+android.api = 34
 
 # (int) Minimum API your APK will support
 android.minapi = 26
