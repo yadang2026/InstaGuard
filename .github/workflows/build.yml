@@ -25,7 +25,7 @@ jobs:
             r="$P4A_DIR/pythonforandroid/recipes/kivy/__init__.py"
             if [ -f "$r" ]; then
               # Fix 1: Remove pyjnius/android from kivy depends
-              sed -i "s/'pyjnius', //g; s/, 'pyjnius'//g; s/'android', //g; s/, 'android'//g" "$r"
+              sed -i "s/'android', //g; s/, 'android'//g; s/'android', //g; s/, 'android'//g" "$r"
               echo "Kivy recipe: $(grep depends $r)"
               
               # Fix 2: Fix gradle template (replace com.android.internal.application)
