@@ -19,8 +19,8 @@ source.include_exts = py,png,jpg,kv,atlas,json,txt,md
 version = 1.0.0
 
 # (list) Application requirements
-# comma separated e.g. requirements = python3,kivy,https://github.com/kivymd/KivyMD/archive/refs/heads/master.zip,androguard,openai,anthropic,requests,cryptography
-requirements = python3,kivy,https://github.com/kivymd/KivyMD/archive/refs/heads/master.zip,androguard,openai,anthropic,requests,cryptography
+# comma separated e.g. requirements = python3,kivy==2.3.1,https://github.com/kivymd/KivyMD/archive/refs/heads/master.zip,androguard,openai,anthropic,requests,cryptography
+requirements = python3,kivy==2.3.1,https://github.com/kivymd/KivyMD/archive/refs/heads/master.zip,androguard,openai,anthropic,requests,cryptography
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
