@@ -24,7 +24,7 @@ jobs:
           for i in 1 2 3 4 5 6 7 8; do
             r="$P4A_DIR/pythonforandroid/recipes/kivy/__init__.py"
             if [ -f "$r" ]; then
-              # Fix 1: Remove pyjnius/android from kivy depends
+              # Fix 1: Remove legacy android pkg from kivy depends (pyjnius kept, needed at runtime)
               sed -i "s/'android', //g; s/, 'android'//g; s/'android', //g; s/, 'android'//g" "$r"
               echo "Kivy recipe: $(grep depends $r)"
               
