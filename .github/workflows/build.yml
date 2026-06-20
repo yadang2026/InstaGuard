@@ -17,8 +17,10 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq python3-pip python3-dev git autoconf libtool pkg-config zlib1g-dev libncurses-dev cmake libffi-dev libssl-dev openjdk-17-jdk unzip zip
           pip install buildozer cython
+          # Pre-install lxml binary wheel (avoids Cython C-source NDK incompatibility)
+          pip install --only-binary=lxml lxml 2>/dev/null || true
           # AGP will use bundled Gradle wrapper
-      - name: Patch p4a (kivy recipe + gradle template)
+      - name: Patch p4a (kivy recipe + lxml + gradle template)
         run: |
           P4A_DIR=".buildozer/android/platform/python-for-android"
           for i in 1 2 3 4 5 6 7 8; do
@@ -26,6 +28,15 @@ jobs:
             if [ -f "$r" ]; then
               # Fix 1: Use kivy 2.3.1 (fixes NDK r28c Cython compatibility)
               sed -i "s/version = '2.3.0'/version = '2.3.1'/" "$r"
+              # Fix 3: Force lxml to use pre-built wheel (skip C compilation)
+              lr="$P4A_DIR/pythonforandroid/recipes/lxml/__init__.py"
+              if [ -f "$lr" ]; then
+                echo "lxml recipe found, will be built from source"
+                # Replace pip install with wheel-only
+                sed -i 's/pip_install_reqs/wheel_install_reqs/g' "$lr" 2>/dev/null || true
+              fi
+              # Also try to pre-install lxml wheel in host Python
+              pip install --only-binary=:all: lxml 2>/dev/null || true
               # Fix 2: Remove legacy android pkg from kivy depends
               sed -i "s/'android', //g; s/, 'android'//g" "$r"
               echo "Kivy recipe: $(grep -E 'version|depends' $r | tr '\n' ' ')"
